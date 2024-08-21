@@ -2,6 +2,7 @@ import Logo from "./Logo";
 import { FaAddressCard } from "react-icons/fa6";
 import { IoPersonAdd } from "react-icons/io5";
 import { NavLink, useNavigate } from "react-router-dom";
+import { MdContactPhone } from "react-icons/md";
 import { CgLogOut } from "react-icons/cg";
 
 function NavLinksSidebar() {
@@ -40,6 +41,16 @@ function NavLinksSidebar() {
           >
             <span className="icon">{<IoPersonAdd />}</span>
             เพิ่มข้อมูลพนักงาน
+          </NavLink>
+          <NavLink
+            to="/employee-contract"
+            key={3}
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
+            <span className="icon">{<MdContactPhone />}</span>
+            ช่องทางติดต่อพนักงาน
           </NavLink>
         </ul>
       </div>

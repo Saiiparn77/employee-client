@@ -23,7 +23,7 @@ function EditEmployee() {
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
-
+//เรียกดูข้อมูลพนักงานคนนั้นด้วย id
   const fetchEmployeeDetails = async () => {
     try {
       const { data } = await axios.get(`http://localhost:3000/employee/${id}/manager`);
@@ -42,7 +42,7 @@ function EditEmployee() {
     }
     await updateEmployee();
   };
-
+//อัพเดตข้อมูลพนักงาน
   const updateEmployee = async () => {
     try {
       await axios.put("http://localhost:3000/employee/" + id, {
@@ -113,6 +113,7 @@ function EditEmployee() {
           name="wage_per_date"
           value={values.wage_per_date}
           className="form-input"
+          type="number"
           onChange={handleChange}
         ></input>
 
@@ -121,14 +122,16 @@ function EditEmployee() {
           name="num_of_work_date"
           value={values.num_of_work_date}
           className="form-input"
+          type="number"
           onChange={handleChange}
         ></input>
 
         <input
           placeholder="บวกค่ากะ"
-          name="test"
-          value={""}
+          name="shift_fee"
+          value={values.shift_fee}
           className="form-input"
+          type="number"
           onChange={handleChange}
         ></input>
 
@@ -137,6 +140,7 @@ function EditEmployee() {
           name="ot_per_hour"
           value={values.ot_per_hour}
           className="form-input"
+          type="number"
           onChange={handleChange}
         ></input>
 
@@ -145,6 +149,7 @@ function EditEmployee() {
           name="num_of_ot_hours"
           value={values.num_of_ot_hours}
           className="form-input"
+          type="number"
           onChange={handleChange}
         ></input>
 

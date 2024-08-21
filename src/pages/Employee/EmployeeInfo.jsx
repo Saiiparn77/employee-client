@@ -9,12 +9,13 @@ function EmployeeInfo() {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const [employeeInfo, setEmployeeInfo] = useState({});
-
+//ดึงข้อมูลพนักงานมาแสดงผล
   const getUserInfo = async () => {
     try {
       const { data } = await axios.get(
         `http://localhost:3000/employee/${token}`
       );
+      //นำข้อมูลพนักงานเก็บไว้ใน state
       setEmployeeInfo(data);
     } catch (err) {
       console.log(err);
@@ -79,7 +80,7 @@ function EmployeeInfo() {
 
         <div className="emp-info">
           <div className="emp-key">ค่ากะ</div>
-          <div> {employeeInfo.num_of_work_date || `-`}</div>
+          <div> {employeeInfo.shift_fee || `-`}</div>
         </div>
 
         <div className="emp-info">

@@ -12,6 +12,7 @@ function EmployeesManagement() {
   const navigate = useNavigate();
   const [employees, setEmployees] = useState([]);
   const token = localStorage.getItem("token");
+  //ดึงข้อมูลพนักงานทั้งหมด
   const fetchAllEmployees = async () => {
     try {
       const { data } = await axios.get("http://localhost:3000/employee");
@@ -21,7 +22,7 @@ function EmployeesManagement() {
       console.log(err);
     }
   };
-
+//แสดงผลpop up ในการยืนยันการลบพนักงาน
   const handleDelete = (id) => {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -40,9 +41,12 @@ function EmployeesManagement() {
         reverseButtons: true,
       })
       .then((result) => {
+//ถ้ากดปุ่มยืนยันจะทำการลบพนักงาน
         if (result.isConfirmed) {
+          //เรียกใช้ฟังชั่นก์ในการลบพนักงาน
           deleteEmployeeById(id);
           return;
+          //ถ้ากดปุ่มยกเลิก ไม่มีอะไรเปลี่ยน
         } else if (
           /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel
@@ -51,7 +55,7 @@ function EmployeesManagement() {
         }
       });
   };
-
+//ฟังก์ชั่นในการลบจากฐานข้อมูล
   const deleteEmployeeById = async (employeeId) => {
     try {
       await axios.delete("http://localhost:3000/employee/" + employeeId);
@@ -105,6 +109,7 @@ function EmployeesManagement() {
             <th>ตัวเลือก</th>
           </tr>
           {employees.length > 0 &&
+           //ลูปเพื่อแสดงผลข้อมูลพนักงานทั้งหมด
             employees.map((emp, index) => {
               return (
                 <tr key={index}>
@@ -113,21 +118,25 @@ function EmployeesManagement() {
                   <td>{emp.nick_name}</td>
                   <td>{emp.wage_per_date || `-`}</td>
                   <td>{emp.num_of_work_date || `-`}</td>
-                  <td>ค่ากะ</td>
+                  <td>{emp.shift_fee || `-`}</td>
                   <td>{emp.ot_per_hour || `-`}</td>
                   <td>{emp.num_of_ot_hours || `-`}</td>
                   <td>{emp.ot_summary || `-`}</td>
-                  <td>{emp.total_salary || `ยอดรวม`}</td>
+                  <td>{emp.total_salary || `-`}</td>
                   <td className="option-col">
                     <button
+                  
                       className="edit-btn"
+                      //เมื่อกดปุ่มแก้ไขจะแสดงผลหน้าฟอร์มในการแก้ไขพนักงานคนนั้นด้วย id
                       onClick={() => {
+                        //นำทางไปหน้าสำหรับแก้ไข
                         navigate("/edit-employee/" + emp.id);
                       }}
                     >
                       แก้ไข
                     </button>
                     <button
+                    //ลบพนักงาน
                       onClick={() => {
                         handleDelete(emp.id);
                       }}

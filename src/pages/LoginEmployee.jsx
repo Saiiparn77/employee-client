@@ -19,7 +19,7 @@ function LoginEmployee() {
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
-
+//ฟังชั่นก์การเข้าสู่ระบบ
   const loginEmployee = async () => {
     const { employeeId, password } = values;
     if (!employeeId || !password) {
@@ -74,6 +74,7 @@ function LoginEmployee() {
           type={passwordVisible ? "text" : "password"}
           onChange={handleChange}
         ></input>
+      
         <div className="show-pass-container">
           <input
             type="checkbox"

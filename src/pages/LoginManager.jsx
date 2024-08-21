@@ -19,7 +19,7 @@ function LoginManager() {
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
-
+//เข้าสู่ระบบสำหรับผู้จัดการ
   const loginManager = async () => {
     const { username, password } = values;
     if (!username || !password) {

@@ -1,46 +1,60 @@
-import { IoPersonAddSharp } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
+import { MdContactPhone } from "react-icons/md";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import NavLinksSidebar from "../../components/์NavLinksSidebar";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import NavLinksSidebar from "../../components/์NavLinksSidebar";
 
-function AddEmployee() {
-  const [passwordVisible, setPasswordVisible] = useState(false);
-  const token = localStorage.getItem("token");
-
-  const navigate = useNavigate();
+function EditEmployeeContracts() {
   const [values, setValues] = useState({
     fname: "",
     lname: "",
     nick_name: "",
     password: "",
+    wage_per_date: "",
+    num_of_work_date: "",
   });
+  const { id } = useParams();
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
+//เรียกดูข้อมูลพนักงานคนนั้นด้วย id
+  const fetchEmployeeDetails = async () => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:3000/employee/${id}/manager`
+      );
+      setValues(data);
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     const { fname, lname, nick_name, password } = values;
     if (!fname || !lname || !nick_name || !password) {
       setError("กรุณากรอกข้อมูลให้ครบถ้วน");
       return;
     }
-    addEmployee();
+    await updateEmployee();
   };
-//ฟังชั่นก์สำหรับเพิ่มข้อมูลพนักงาน 
-  const addEmployee = async () => {
+//แก้ไขข้อมูลการติดต่อของพนักงานด้วย id
+  const updateEmployee = async () => {
     try {
-      await axios.post("http://localhost:3000/employee", {
+      await axios.put("http://localhost:3000/employee/" + id, {
         ...values,
       });
       setError("");
-      setSuccess("เพิ่มพนักงานของคุณเรียบร้อย");
+      setSuccess("เเก้ไขพนักงานของคุณเรียบร้อย");
+      navigate("/");
     } catch (err) {
-      const { msg } = err.response.data;
+      const msg = err.response.data;
       setSuccess("");
       setError(msg);
     }
@@ -53,6 +67,8 @@ function AddEmployee() {
       const decoded = jwtDecode(token);
       if (!decoded.manager) {
         return navigate("/manager-login");
+      } else {
+        fetchEmployeeDetails();
       }
     }
   }, []);
@@ -63,9 +79,9 @@ function AddEmployee() {
       <NavLinksSidebar />
       <div className="add-employee-form">
         <div className="title">
-          <IoPersonAddSharp /> เพิ่มข้อมูลพนักงาน
+          <MdContactPhone /> แก้ไขข้อมูลการติดต่อพนักงาน
         </div>
-        <div className="note">กรอกข้อมูลเพื่อเพิ่ม ข้อมูลพนักงาน</div>
+        <div className="note">แก้ไขข้อมูลสำหรับพนักงานของคุณ</div>
         <div className="underline"></div>
         {/* alert */}
         {error && <div className="alert alert-danger">{error}</div>}
@@ -73,55 +89,49 @@ function AddEmployee() {
         <input
           placeholder="ชื่อ"
           name="fname"
-          className="form-input"
           value={values.fname}
+          className="form-input"
           onChange={handleChange}
         ></input>
         <input
           placeholder="นามสกุล"
           name="lname"
           className="form-input"
+          onChange={handleChange}
           value={values.lname}
-          onChange={handleChange}
         ></input>
         <input
-          placeholder="ชื่อเล่น"
-          name="nick_name"
+          placeholder="เบอร์ติดต่อ"
+          name="phone_number"
+          value={values.phone_number}
           className="form-input"
-          value={values.nick_name}
           onChange={handleChange}
         ></input>
+
         <input
-          placeholder="**รหัสผ่าน สำหรับพนักงาน"
+          placeholder="LINE"
+          name="line"
+          value={values.line}
           className="form-input"
-          value={values.password}
           onChange={handleChange}
-          name="password"
-          type={passwordVisible ? "text" : "password"}
         ></input>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyItems: "center",
-            gap: "10px",
-            marginBottom: "15px",
-          }}
-        >
-          <label style={{ fontSize: "12px" }}>แสดงรหัสผ่าน</label>
-          <input
-            type="checkbox"
-            onChange={() => {
-              setPasswordVisible(!passwordVisible);
-            }}
-          ></input>
-        </div>
+
+        <input
+          placeholder="E-mail"
+          name="email"
+          value={values.email}
+          className="form-input"
+          onChange={handleChange}
+        ></input>
+
+        {/* 26 */}
+
         <button onClick={onSubmit} className="login-submit-btn" type="submit">
-          เพิ่มพนักงาน
+          ยืนยันการแก้ไข
         </button>
       </div>
     </div>
   );
 }
 
-export default AddEmployee;
+export default EditEmployeeContracts;
